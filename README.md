@@ -18,9 +18,9 @@ npm install
 
 # Environment setup (OPTIONAL - app works in demo mode without API)
 # Create .env file for real API:
-REACT_APP_API_LINK=http://localhost:3001/api
-REACT_APP_API_KEY=your_api_key_here
-REACT_APP_MODEL=gpt-4o
+REACT_APP_API_LINK=https://openrouter.ai/api/v1
+REACT_APP_API_KEY=your_openrouter_api_key_here
+REACT_APP_MODEL=openai/gpt-3.5-turbo
 REACT_APP_MAX_TOKENS=1000
 REACT_APP_TEMPERATURE=0.7
 
@@ -49,6 +49,49 @@ npm start
 - ✅ **AI Chat**: Real AI responses from OpenAI/GPT
 - ✅ **Production Ready**: Full functionality with backend
 - ✅ **Secure**: JWT tokens and proper authentication
+
+## 🤖 **OpenRouter Integration (Recommended)**
+
+OpenRouter provides free access to multiple AI models. Here's how to set it up:
+
+### **Step 1: Get OpenRouter API Key**
+1. Sign up at [openrouter.ai](https://openrouter.ai)
+2. Get your free API key (10,000 requests/month)
+3. No credit card required
+
+### **Step 2: Configure Environment Variables**
+```
+REACT_APP_API_LINK=https://openrouter.ai/api/v1
+REACT_APP_API_KEY=your_openrouter_api_key_here
+REACT_APP_MODEL=openai/gpt-3.5-turbo
+REACT_APP_MAX_TOKENS=1000
+REACT_APP_TEMPERATURE=0.7
+```
+
+### **Step 3: Available Models**
+```
+# OpenAI Models
+openai/gpt-3.5-turbo (recommended for free tier)
+openai/gpt-4
+openai/gpt-4-turbo
+
+# Anthropic Models
+anthropic/claude-3-haiku
+anthropic/claude-3-sonnet
+
+# Google Models
+google/gemini-pro
+google/gemini-flash-1.5
+
+# Meta Models
+meta-llama/llama-3.1-8b-instruct
+meta-llama/llama-3.1-70b-instruct
+```
+
+### **Step 4: Deploy with OpenRouter**
+1. Set the environment variables in Vercel
+2. Deploy your app
+3. Chat will use real AI responses from OpenRouter
 
 ## 🚀 Deployment to Vercel
 

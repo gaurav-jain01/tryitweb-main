@@ -136,11 +136,11 @@ Feel free to try out the chat interface!`,
 
     try {
       if (hasApiCredentials) {
-        // Real API call
+        // Real API call - OpenRouter format
         const response = await axios.post(
           process.env.REACT_APP_API_LINK!,
           {
-            model: process.env.REACT_APP_MODEL || "gpt-4o",
+            model: process.env.REACT_APP_MODEL || "openai/gpt-3.5-turbo",
             messages: [
               ...messagesRef.current.map(msg => ({ role: msg.role, content: msg.content })),
               { role: 'user', content: content.trim() }
@@ -152,6 +152,8 @@ Feel free to try out the chat interface!`,
             headers: {
               "Content-Type": "application/json",
               "Authorization": `Bearer ${process.env.REACT_APP_API_KEY}`,
+              "HTTP-Referer": window.location.origin, // Required by OpenRouter
+              "X-Title": "TryIt Chat App" // Optional: your app name
             },
           }
         );
