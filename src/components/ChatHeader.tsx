@@ -24,11 +24,11 @@ const ChatHeader: React.FC<ChatHeaderProps> = ({ messages }) => {
           <span className="text-text-secondary text-sm">AI Chat Assistant</span>
         </div>
         
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-6">
           <ChatExport messages={messages} />
           <ThemeToggle />
           {user && (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4">
               <span className="text-text-secondary text-sm">
                 Welcome, {user.name || user.email}
               </span>

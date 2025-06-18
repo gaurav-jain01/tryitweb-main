@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import ChatHeader from './components/ChatHeader';
-import ChatMessage from './components/ChatMessage';
-import ChatInput from './components/ChatInput';
-import SkeletonMessage from './components/SkeletonMessage';
-import { useChat } from './hooks/useChat';
+// import ChatMessage from './components/ChatMessage';
+// import ChatInput from './components/ChatInput';
+// import SkeletonMessage from './components/SkeletonMessage';
+// import { useChat } from './hooks/useChat';
+import NewChatBox from './components/NewChatBox';
 import { useAuth } from './contexts/AuthContext';
 import { useTheme } from './contexts/ThemeContext';
 
@@ -11,8 +12,7 @@ const TryIt: React.FC = () => {
   const { user } = useAuth();
   const { theme } = useTheme();
   // const { messages, sendMessage, isLoading, error } = useChat();
-  const { messages, sendMessage, isLoading, error } = useChat();
-  const [input, setInput] = useState<string>("");
+  // const [input, setInput] = useState<string>("");
 
   if (!user) {
     return (
@@ -27,10 +27,11 @@ const TryIt: React.FC = () => {
 
   return (
     <div className={`min-h-screen transition-colors duration-300 ${theme === 'dark' ? 'dark' : ''}`}>
-      <ChatHeader messages={messages} />
+      <ChatHeader messages={[]} />
       
+      {/* Previous ChatBox Implementation - Commented Out */}
+      {/* 
       <div className="flex flex-col h-[calc(100vh-80px)]">
-        {/* Messages Container */}
         <div className="flex-1 overflow-y-auto bg-bg-primary">
           <div className="max-w-7xl mx-auto px-6 py-4 space-y-4">
             {messages.length === 0 && !isLoading && (
@@ -58,17 +59,22 @@ const TryIt: React.FC = () => {
           </div>
         </div>
         
-        {/* Input Area */}
         <div className="border-t border-border-color bg-bg-secondary">
           <div className="max-w-7xl mx-auto px-6 py-4">
-            {/* <ChatInput 
+            <ChatInput 
               input={input} 
               setInput={setInput} 
               isLoading={isLoading} 
               onSendMessage={() => sendMessage(input)} 
-            /> */}
+            />
           </div>
         </div>
+      </div>
+      */}
+
+      {/* New ChatBox Implementation */}
+      <div className="h-[calc(100vh-80px)]">
+        <NewChatBox />
       </div>
     </div>
   );
