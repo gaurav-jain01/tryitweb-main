@@ -48,8 +48,8 @@ export const useChat = (): UseChatReturn => {
     currentIndex: -1
   });
 
-  // Check if we have API credentials
-  const hasApiCredentials = process.env.REACT_APP_API_KEY && process.env.REACT_APP_API_LINK;
+  // Force demo mode for chatbot
+  const hasApiCredentials = false;
 
   // Update ref when messages change
   useEffect(() => {
