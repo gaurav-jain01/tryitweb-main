@@ -1,329 +1,232 @@
-# Tryit - AI Chatbot with JWT Authentication
+# TryIt - AI Chatbot with JWT Authentication
 
-A modern React-based AI chatbot application with secure JWT token authentication, session management, and real-time chat capabilities.
+A modern React-based AI chatbot application with secure JWT token authentication and real-time chat capabilities.
 
-## Features
-
-### 🔐 JWT Authentication System
-- **Secure Token Management**: JWT access and refresh tokens
-- **Automatic Token Refresh**: Seamless token renewal
-- **Token Validation**: Real-time token expiration checking
-- **Session Persistence**: Secure localStorage token storage
-- **Protected Routes**: Route-based authentication guards
-- **Token Information Display**: Debug token details and status
-
-### 💬 Chat Features
-- **AI-Powered**: GPT-4o integration for intelligent responses
-- **Real-time Streaming**: Word-by-word response streaming
-- **Markdown Support**: Rich text formatting in messages
-- **Message History**: Persistent chat conversations
-- **Loading States**: Smooth user experience with loading indicators
-
-### 🎨 Modern UI/UX
-- **Responsive Design**: Works on desktop, tablet, and mobile
-- **Beautiful Gradients**: Modern gradient backgrounds
-- **Smooth Animations**: CSS animations and transitions
-- **Form Validation**: Real-time input validation
-- **Error Handling**: User-friendly error messages
-
-## Tech Stack
-
-- **Frontend**: React 19, React Router DOM
-- **Authentication**: JWT tokens, jwt-decode
-- **HTTP Client**: Axios with interceptors
-- **Styling**: Custom CSS with modern design
-- **UI Components**: React Markdown, React Loader Spinner
-
-## JWT Authentication Architecture
-
-### Token Management
-- **Access Token**: Short-lived (15-60 minutes) for API requests
-- **Refresh Token**: Long-lived (7-30 days) for token renewal
-- **Secure Storage**: Tokens stored in localStorage with validation
-- **Automatic Refresh**: Transparent token renewal via axios interceptors
-
-### Security Features
-- **Token Validation**: Real-time expiration checking
-- **Automatic Logout**: Session termination on token expiration
-- **CSRF Protection**: Secure token transmission
-- **Error Handling**: Graceful authentication failure handling
-
-## Getting Started
+## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js (v14 or higher)
-- npm or yarn
-- Backend API with JWT authentication endpoints
+- **Node.js** (v16+)
+- **npm** or **yarn**
+- **Backend API** with JWT authentication
 
-### Installation
+### Setup
+```bash
+# Clone & install
+git clone <repository-url>
+cd tryitweb-main
+npm install
 
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd tryitweb-main
-   ```
+# Environment setup
+# Create .env file:
+REACT_APP_API_LINK=http://localhost:3001/api
+REACT_APP_API_KEY=your_api_key_here
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
+# Start development
+npm start
+```
 
-3. **Environment Setup**
-   Create a `.env` file in the root directory:
-   ```env
-   REACT_APP_API_LINK=http://localhost:3001/api
-   REACT_APP_API_KEY=your_api_key_here
-   ```
+### Available Scripts
+| Command | Description |
+|---------|-------------|
+| `npm start` | Development server |
+| `npm test` | Run tests |
+| `npm run build` | Production build |
 
-4. **Start the development server**
-   ```bash
-   npm start
-   ```
+## 🏗️ Architecture
 
-5. **Open your browser**
-   Navigate to [http://localhost:3000](http://localhost:3000)
+### System Overview
+```mermaid
+graph TB
+    subgraph "Frontend (React)"
+        A[App.tsx] --> B[AuthContext]
+        A --> C[Router]
+        C --> D[Login/Signup]
+        C --> E[Chat Interface]
+        E --> F[Chat Components]
+    end
+    
+    subgraph "Backend API"
+        G[Auth Service]
+        H[Chat Service]
+    end
+    
+    subgraph "External"
+        I[OpenAI GPT-4o]
+    end
+    
+    B --> G
+    E --> H
+    H --> I
+    
+    style A fill:#61dafb
+    style B fill:#ff6b6b
+    style E fill:#4ecdc4
+```
 
-## API Endpoints
+### Authentication Flow
+```mermaid
+sequenceDiagram
+    participant U as User
+    participant F as Frontend
+    participant B as Backend
+    
+    U->>F: Access protected route
+    F->>B: Check authentication
+    alt Authenticated
+        F->>U: Allow access
+    else Not authenticated
+        F->>U: Redirect to login
+        U->>F: Enter credentials
+        F->>B: POST /auth/login
+        B->>F: Return JWT tokens
+        F->>U: Redirect to chat
+    end
+```
 
-Your backend should provide the following JWT authentication endpoints:
+## 📱 Screenshots
 
 ### Authentication
-- `POST /auth/signup` - User registration
-- `POST /auth/login` - User login (returns access + refresh tokens)
-- `POST /auth/refresh` - Token refresh
-- `POST /auth/logout` - User logout
-- `POST /chat` - Send chat messages (protected)
+<!-- Add screenshots here -->
+- **Login Page**: Modern authentication interface
+  ![Login Page](assets/login-page.png "Login Interface")
+- **Signup Page**: User registration form
+  ![Signup Page](assets/signup-page.png "Signup Form")
 
-### Request/Response Formats
+### Chat Interface
+<!-- Add screenshots here -->
+- **Main Chat**: Clean chat interface
+  ![Main Chat](assets/chat-interface.png "Chat Interface")
+- **Mobile View**: Responsive design
+  ![Mobile View](assets/mobile-view.png "Mobile Responsive")
+- **Theme Toggle**: Dark/light mode
+  ![Theme Toggle](assets/theme-toggle.png "Dark/Light Theme")
 
-#### Signup
-```json
-POST /auth/signup
-{
-  "name": "John Doe",
-  "email": "john@example.com",
-  "password": "password123"
-}
+<!-- Alternative: Centered layout -->
+<div align="center">
+  <h3>Application Screenshots</h3>
+  <img src="assets/login-page.png" alt="Login Page" width="300">
+  <img src="assets/chat-interface.png" alt="Chat Interface" width="300">
+  <img src="assets/mobile-view.png" alt="Mobile View" width="200">
+</div>
 
-Response:
-{
-  "success": true,
-  "message": "User registered successfully"
-}
-```
+## 🔐 Features
 
-#### Login
-```json
-POST /auth/login
-{
-  "email": "john@example.com",
-  "password": "password123"
-}
+### Authentication
+- JWT access & refresh tokens
+- Automatic token refresh
+- Protected routes
+- Session persistence
 
-Response:
-{
-  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "user": {
-    "id": "user_id",
-    "name": "John Doe",
-    "email": "john@example.com",
-    "roles": ["user"]
-  }
-}
-```
+### Chat
+- GPT-4o integration
+- Real-time streaming
+- Markdown support
+- Message history
 
-#### Token Refresh
-```json
-POST /auth/refresh
-{
-  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-}
+### UI/UX
+- Responsive design
+- Modern gradients
+- Smooth animations
+- Form validation
 
-Response:
-{
-  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-}
-```
+## 🛠️ Tech Stack
 
-#### Chat (Protected)
-```json
-POST /chat
-Headers: {
-  "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
-  "api-key": "your_api_key"
-}
-{
-  "model": "gpt-4o",
-  "messages": [
-    {"role": "user", "content": "Hello!"}
-  ]
-}
-```
+| Category | Technology |
+|----------|------------|
+| **Frontend** | React 19, TypeScript |
+| **Routing** | React Router DOM |
+| **Auth** | JWT, jwt-decode |
+| **HTTP** | Axios |
+| **Styling** | Tailwind CSS |
+| **UI** | React Markdown |
 
-## JWT Token Structure
-
-### Access Token Claims
-```json
-{
-  "sub": "user_id",
-  "iss": "your-app",
-  "aud": "your-app",
-  "iat": 1640995200,
-  "exp": 1640998800,
-  "user": {
-    "id": "user_id",
-    "name": "John Doe",
-    "email": "john@example.com",
-    "roles": ["user"]
-  }
-}
-```
-
-### Token Configuration
-- **Access Token Expiry**: 15-60 minutes
-- **Refresh Token Expiry**: 7-30 days
-- **Algorithm**: HS256 (HMAC SHA-256)
-- **Issuer**: Your application domain
-- **Audience**: Your application domain
-
-## Project Structure
-
+## 📁 Project Structure
 ```
 src/
 ├── components/
-│   ├── auth/
-│   │   ├── Login.js          # Login component
-│   │   ├── Signup.js         # Signup component
-│   │   └── Auth.css          # Authentication styles
-│   ├── ChatHeader.js         # Chat header with user info
-│   ├── ChatInput.js          # Message input component
-│   ├── ChatMessage.js        # Individual message component
-│   ├── TokenInfo.js          # JWT token information display
-│   ├── TokenInfo.css         # Token info styles
-│   └── styles/               # Component-specific styles
-├── contexts/
-│   └── AuthContext.js        # JWT authentication context
-├── hooks/
-│   └── useChat.js           # Chat functionality hook
-├── utils/
-│   └── jwtUtils.js          # JWT utility functions
-├── App.js                   # Main app with routing
-└── TryIt.js                # Chat interface component
+│   ├── auth/          # Login, Signup
+│   ├── ChatHeader.tsx
+│   ├── ChatInput.tsx
+│   └── ChatMessage.tsx
+├── contexts/          # Auth, Theme
+├── hooks/            # useChat
+├── utils/            # JWT utils
+├── App.tsx           # Main app
+└── TryIt.tsx         # Chat interface
 ```
 
-## JWT Authentication Flow
+## 🔌 API Endpoints
 
-### 1. User Registration
-1. User fills signup form
-2. Backend creates user account
-3. Redirect to login page
-4. No automatic login (security best practice)
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/auth/signup` | POST | User registration |
+| `/auth/login` | POST | User login |
+| `/auth/refresh` | POST | Token refresh |
+| `/chat` | POST | Send messages |
 
-### 2. User Login
-1. User enters credentials
-2. Backend validates and returns JWT tokens
-3. Frontend stores tokens securely
-4. User redirected to chat
+### Example Login
+```json
+POST /auth/login
+{
+  "email": "user@example.com",
+  "password": "password123"
+}
 
-### 3. Token Management
-1. Access token used for API requests
-2. Automatic token refresh via interceptors
-3. Session persistence across browser refreshes
-4. Automatic logout on token expiration
+Response:
+{
+  "accessToken": "jwt_token_here",
+  "refreshToken": "refresh_token_here",
+  "user": { "id": "user_id", "name": "John Doe" }
+}
+```
 
-### 4. Protected Routes
-1. Route guards check authentication
-2. Unauthorized users redirected to login
-3. Authenticated users access protected content
-4. Token validation on each route change
+## 🔒 Security
 
-## Security Features
-
-### Token Security
-- **Secure Storage**: Tokens stored in localStorage with validation
-- **Automatic Refresh**: Transparent token renewal
-- **Expiration Handling**: Graceful session termination
+- **Token Management**: Short-lived access tokens (15-60 min)
+- **Auto Refresh**: Transparent token renewal
+- **Secure Storage**: localStorage with validation
+- **Route Protection**: Authentication guards
 - **CSRF Protection**: Secure token transmission
 
-### Authentication Guards
-- **Route Protection**: Unauthorized access prevention
-- **Token Validation**: Real-time expiration checking
-- **Session Management**: Secure user sessions
-- **Error Handling**: Graceful authentication failures
+## 🚀 Deployment
 
-### Best Practices
-- **Short-lived Access Tokens**: 15-60 minutes
-- **Long-lived Refresh Tokens**: 7-30 days
-- **Secure Token Storage**: localStorage with validation
-- **Automatic Logout**: Session termination on expiration
+```bash
+# Build for production
+npm run build
 
-## Available Scripts
+# Deploy build folder to:
+# - Netlify
+# - Vercel  
+# - AWS S3
+# - Docker
+```
 
-- `npm start` - Runs the app in development mode
-- `npm test` - Launches the test runner
-- `npm run build` - Builds the app for production
-- `npm run eject` - Ejects from Create React App
+### Environment Variables
+```env
+REACT_APP_API_LINK=https://your-api-domain.com/api
+REACT_APP_API_KEY=your_production_api_key
+```
 
-## Customization
+## 🐛 Troubleshooting
 
-### JWT Configuration
-- Modify token expiration times in backend
-- Update token claims structure
-- Customize token refresh logic
-- Add role-based access control
+| Issue | Solution |
+|-------|----------|
+| Token Expiration | Check backend token expiry |
+| CORS Errors | Configure backend CORS |
+| Network Errors | Verify API endpoints |
+| Storage Issues | Check localStorage |
 
-### Authentication Flow
-- Update API endpoints in `AuthContext.js`
-- Modify token storage strategy
-- Customize error handling
-- Add additional security measures
+## 🤝 Contributing
 
-### UI/UX
-- Update authentication page styles
-- Customize token information display
-- Modify loading states and animations
-- Add additional user feedback
+1. Fork repository
+2. Create feature branch
+3. Make changes
+4. Submit pull request
 
-## Deployment
-
-1. **Build the application**
-   ```bash
-   npm run build
-   ```
-
-2. **Deploy the `build` folder** to your hosting service
-
-3. **Update environment variables** for production
-
-4. **Configure CORS** on your backend for production domain
-
-## Troubleshooting
-
-### Common Issues
-- **Token Expiration**: Check token expiration times
-- **CORS Errors**: Configure backend CORS settings
-- **Network Errors**: Verify API endpoint configuration
-- **Storage Issues**: Check localStorage availability
-
-### Debug Tools
-- **Token Info Component**: Display token details and status
-- **Browser DevTools**: Check localStorage and network requests
-- **Console Logs**: Detailed authentication flow logging
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
-
-## License
+##📄 License
 
 This project is licensed under the MIT License.
 
-## Support
+---
 
-For support and questions, please open an issue in the repository.
+**Made with ❤️ using React and JWT Authentication**
