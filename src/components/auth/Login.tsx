@@ -37,9 +37,10 @@ const Login: React.FC = () => {
   const { login, error: authError, clearError } = useAuth();
   const navigate = useNavigate();
 
+  // Clear auth error when component mounts
   useEffect(() => {
     clearError();
-  }, [clearError]);
+  }, []); // Only run once on mount
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
@@ -74,6 +75,11 @@ const Login: React.FC = () => {
         [name]: ''
       }));
     }
+    
+    // Clear auth error when user starts typing
+    if (authError) {
+      clearError();
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -82,13 +88,18 @@ const Login: React.FC = () => {
     if (!validateForm()) return;
 
     setIsSubmitting(true);
-    const result = await login(formData.email, formData.password);
     
-    if (result.success) {
-      navigate('/chat');
+    try {
+      const result = await login(formData.email, formData.password);
+      
+      if (result.success) {
+        navigate('/chat');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+    } finally {
+      setIsSubmitting(false);
     }
-    
-    setIsSubmitting(false);
   };
 
   const togglePasswordVisibility = () => {
@@ -97,7 +108,7 @@ const Login: React.FC = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-bg-primary p-5 transition-colors duration-300">
-      <div className="bg-bg-secondary border border-border-color rounded-2xl p-10 w-full max-w-md shadow-lg backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+      <div className="bg-bg-secondary border border-border-color rounded-2xl p-10 w-full max-w-md shadow-lg backdrop-blur-sm">
         <div className="text-center mb-8">
           <h1 className="text-text-primary text-3xl font-bold mb-2 tracking-tight">
             Welcome Back
@@ -109,7 +120,7 @@ const Login: React.FC = () => {
 
         <form onSubmit={handleSubmit} className="space-y-5">
           {authError && (
-            <div className="bg-danger/10 border border-danger/20 text-danger p-4 rounded-lg text-sm font-medium text-center flex items-center justify-center gap-2 animate-fade-in">
+            <div className="bg-danger/10 border border-danger/20 text-danger p-4 rounded-lg text-sm font-medium text-center flex items-center justify-center gap-2">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
                 <path d="M15 9L9 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -189,7 +200,7 @@ const Login: React.FC = () => {
 
           <button
             type="submit"
-            className="w-full bg-accent-primary text-white border-none rounded-lg py-4 text-base font-semibold cursor-pointer transition-all duration-300 flex items-center justify-center gap-2 mt-2 hover:bg-accent-secondary hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0 disabled:bg-text-muted disabled:cursor-not-allowed disabled:opacity-70"
+            className="w-full bg-accent-primary text-white border-none rounded-lg py-4 text-base font-semibold cursor-pointer transition-colors duration-300 flex items-center justify-center gap-2 mt-2 hover:bg-accent-secondary disabled:bg-text-muted disabled:cursor-not-allowed disabled:opacity-70"
             disabled={isSubmitting}
           >
             {isSubmitting ? (

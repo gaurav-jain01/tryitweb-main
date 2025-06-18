@@ -24,10 +24,10 @@ interface UseChatReturn {
   chatHistory: ChatHistory;
 }
 
-// Mock AI responses
+// Mock AI responses for fallback mode
 const getMockResponse = (userMessage: string): string => {
   const responses = [
-    `I understand you're asking about "${userMessage}". This is a mock response since there's no real AI backend connected. In a real application, this would be an AI-generated response based on your input.`,
+    `I understand you're asking about "${userMessage}". This is a demo response since no AI API is configured. In a real application, this would be an AI-generated response based on your input.`,
     `Thanks for your message: "${userMessage}". I'm currently running in demo mode with mock responses. The actual AI functionality would be available when connected to a real backend service.`,
     `Interesting question about "${userMessage}"! This is a placeholder response. In production, this would be processed by an AI model like GPT-4 or similar.`,
     `I received your message: "${userMessage}". Since this is a demo version, I'm providing mock responses. The real chat would connect to an AI service for intelligent responses.`,
@@ -62,6 +62,27 @@ export const useChat = (): UseChatReturn => {
       }
     }
   }, []);
+
+  // Add welcome message when no API is configured
+  useEffect(() => {
+    if (!hasApiCredentials && messages.length === 0) {
+      const welcomeMessage: Message = {
+        role: 'assistant',
+        content: `👋 Welcome to TryIt! 
+
+I'm currently running in **demo mode** since no AI API is configured. You can still:
+• Sign up and log in (mock authentication)
+• Send messages and get demo responses
+• Experience the chat interface
+
+To enable real AI responses, configure your API credentials in the environment variables.
+
+Feel free to try out the chat interface!`,
+        timestamp: new Date()
+      };
+      setMessages([welcomeMessage]);
+    }
+  }, [hasApiCredentials, messages.length]);
 
   // Save chat history to localStorage
   const saveChatHistory = useCallback((newHistory: ChatHistory) => {
@@ -139,8 +160,12 @@ export const useChat = (): UseChatReturn => {
 
         setMessages(prev => [...prev, assistantMessage]);
       } else {
-        // Mock response (fallback)
+        // Fallback mode - Mock response
+        console.log('Chat: Using fallback mode - no API configured');
+        
+        // Simulate API delay
         await new Promise(resolve => setTimeout(resolve, 1500));
+        
         const mockResponse = getMockResponse(content.trim());
         
         const assistantMessage: Message = {
@@ -155,14 +180,12 @@ export const useChat = (): UseChatReturn => {
     } catch (err: any) {
       console.error('Chat error:', err);
       
-      if (hasApiCredentials && err.response?.status === 401) {
+      if (err.response?.status === 401) {
         setError('API key is invalid. Please check your configuration.');
-      } else if (hasApiCredentials && err.response?.status === 429) {
+      } else if (err.response?.status === 429) {
         setError('Rate limit exceeded. Please try again later.');
-      } else if (hasApiCredentials) {
-        setError(`API Error: ${err.response?.data?.error?.message || err.message}`);
       } else {
-        setError('An error occurred while processing your request.');
+        setError(`API Error: ${err.response?.data?.error?.message || err.message}`);
       }
     } finally {
       setIsLoading(false);
