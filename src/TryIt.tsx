@@ -10,6 +10,7 @@ import { useTheme } from './contexts/ThemeContext';
 const TryIt: React.FC = () => {
   const { user } = useAuth();
   const { theme } = useTheme();
+  // const { messages, sendMessage, isLoading, error } = useChat();
   const { messages, sendMessage, isLoading, error } = useChat();
   const [input, setInput] = useState<string>("");
 
@@ -60,12 +61,12 @@ const TryIt: React.FC = () => {
         {/* Input Area */}
         <div className="border-t border-border-color bg-bg-secondary">
           <div className="max-w-7xl mx-auto px-6 py-4">
-            <ChatInput 
+            {/* <ChatInput 
               input={input} 
               setInput={setInput} 
               isLoading={isLoading} 
               onSendMessage={() => sendMessage(input)} 
-            />
+            /> */}
           </div>
         </div>
       </div>
