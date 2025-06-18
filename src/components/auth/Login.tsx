@@ -1,7 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
-import { ThreeDots } from 'react-loader-spinner';
+import LoadingSpinner from '../LoadingSpinner';
+
+// Try to import react-loader-spinner, fallback to custom spinner
+let ThreeDots: any;
+try {
+  const { ThreeDots: Spinner } = require('react-loader-spinner');
+  ThreeDots = Spinner;
+} catch (error) {
+  // Fallback to custom spinner if react-loader-spinner fails
+  ThreeDots = ({ height, width, color, ...props }: any) => (
+    <LoadingSpinner size={Math.max(height, width)} color={color} />
+  );
+}
 
 interface FormData {
   email: string;

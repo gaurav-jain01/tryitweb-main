@@ -133,7 +133,7 @@ sequenceDiagram
 
 | Category | Technology |
 |----------|------------|
-| **Frontend** | React 19, TypeScript |
+| **Frontend** | React 18, TypeScript |
 | **Routing** | React Router DOM |
 | **Auth** | JWT, jwt-decode |
 | **HTTP** | Axios |
