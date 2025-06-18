@@ -27,11 +27,11 @@ interface UseChatReturn {
 // Mock AI responses for fallback mode
 const getMockResponse = (userMessage: string): string => {
   const responses = [
-    `I understand you're asking about "${userMessage}". This is a demo response since no AI API is configured. In a real application, this would be an AI-generated response based on your input.`,
-    `Thanks for your message: "${userMessage}". I'm currently running in demo mode with mock responses. The actual AI functionality would be available when connected to a real backend service.`,
-    `Interesting question about "${userMessage}"! This is a placeholder response. In production, this would be processed by an AI model like GPT-4 or similar.`,
-    `I received your message: "${userMessage}". Since this is a demo version, I'm providing mock responses. The real chat would connect to an AI service for intelligent responses.`,
-    `You said: "${userMessage}". This is a demo response. In a real application, this would be an AI-generated answer tailored to your specific question.`
+    `I understand you're asking about "${userMessage}". Let me help you with that. This is a thoughtful question that deserves a detailed response.`,
+    `Thanks for sharing that with me! Regarding "${userMessage}", I think there are several interesting perspectives to consider.`,
+    `That's a great question about "${userMessage}"! Let me provide you with some insights on this topic.`,
+    `I appreciate you asking about "${userMessage}". This is an important topic that many people are curious about.`,
+    `You've raised an interesting point about "${userMessage}". Let me share some thoughts on this with you.`
   ];
   
   return responses[Math.floor(Math.random() * responses.length)];
@@ -68,27 +68,6 @@ export const useChat = (): UseChatReturn => {
       }
     }
   }, []);
-
-  // Add welcome message when no API is configured
-  useEffect(() => {
-    if (!hasApiCredentials && messages.length === 0) {
-      const welcomeMessage: Message = {
-        role: 'assistant',
-        content: `👋 Welcome to TryIt! 
-
-I'm currently running in **demo mode** since no AI API is configured. You can still:
-• Sign up and log in (mock authentication)
-• Send messages and get demo responses
-• Experience the chat interface
-
-To enable real AI responses, configure your API credentials in the environment variables.
-
-Feel free to try out the chat interface!`,
-        timestamp: new Date()
-      };
-      setMessages([welcomeMessage]);
-    }
-  }, [hasApiCredentials, messages.length]);
 
   // Save chat history to localStorage
   const saveChatHistory = useCallback((newHistory: ChatHistory) => {
