@@ -40,7 +40,7 @@ const Login: React.FC = () => {
   // Clear auth error when component mounts
   useEffect(() => {
     clearError();
-  }, []); // Only run once on mount
+  }, [clearError]); // Add clearError to dependencies
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};

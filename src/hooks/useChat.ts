@@ -42,6 +42,7 @@ export const useChat = (): UseChatReturn => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const messagesRef = useRef<Message[]>([]);
   const [chatHistory, setChatHistory] = useState<ChatHistory>({
     messages: [],
     currentIndex: -1
@@ -49,6 +50,11 @@ export const useChat = (): UseChatReturn => {
 
   // Check if we have API credentials
   const hasApiCredentials = process.env.REACT_APP_API_KEY && process.env.REACT_APP_API_LINK;
+
+  // Update ref when messages change
+  useEffect(() => {
+    messagesRef.current = messages;
+  }, [messages]);
 
   // Load chat history from localStorage
   useEffect(() => {
@@ -136,7 +142,7 @@ Feel free to try out the chat interface!`,
           {
             model: process.env.REACT_APP_MODEL || "gpt-4o",
             messages: [
-              ...messages.map(msg => ({ role: msg.role, content: msg.content })),
+              ...messagesRef.current.map(msg => ({ role: msg.role, content: msg.content })),
               { role: 'user', content: content.trim() }
             ],
             max_tokens: parseInt(process.env.REACT_APP_MAX_TOKENS || "1000"),
@@ -190,7 +196,7 @@ Feel free to try out the chat interface!`,
     } finally {
       setIsLoading(false);
     }
-  }, [isLoading, chatHistory.messages, saveChatHistory, messages, hasApiCredentials]);
+  }, [isLoading, chatHistory.messages, saveChatHistory, hasApiCredentials]);
 
   const navigateHistory = useCallback((direction: 'up' | 'down') => {
     if (chatHistory.messages.length === 0) return '';
@@ -206,7 +212,7 @@ Feel free to try out the chat interface!`,
     setChatHistory(prev => ({ ...prev, currentIndex: newIndex }));
     
     return newIndex >= 0 ? chatHistory.messages[chatHistory.messages.length - 1 - newIndex] : '';
-  }, [chatHistory]);
+  }, [chatHistory.messages, chatHistory.currentIndex]);
 
   const clearHistory = useCallback(() => {
     setChatHistory({ messages: [], currentIndex: -1 });
