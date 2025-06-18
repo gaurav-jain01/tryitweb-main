@@ -137,8 +137,12 @@ Feel free to try out the chat interface!`,
     try {
       if (hasApiCredentials) {
         // Real API call - OpenRouter format
+        const apiUrl = process.env.REACT_APP_API_LINK === 'https://openrouter.ai/api/v1' 
+          ? 'https://openrouter.ai/api/v1/chat/completions'
+          : process.env.REACT_APP_API_LINK!;
+          
         const response = await axios.post(
-          process.env.REACT_APP_API_LINK!,
+          apiUrl,
           {
             model: process.env.REACT_APP_MODEL || "openai/gpt-3.5-turbo",
             messages: [

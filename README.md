@@ -18,7 +18,7 @@ npm install
 
 # Environment setup (OPTIONAL - app works in demo mode without API)
 # Create .env file for real API:
-REACT_APP_API_LINK=https://openrouter.ai/api/v1
+REACT_APP_API_LINK=https://openrouter.ai/api/v1/chat/completions
 REACT_APP_API_KEY=your_openrouter_api_key_here
 REACT_APP_MODEL=openai/gpt-3.5-turbo
 REACT_APP_MAX_TOKENS=1000
@@ -61,7 +61,7 @@ OpenRouter provides free access to multiple AI models. Here's how to set it up:
 
 ### **Step 2: Configure Environment Variables**
 ```
-REACT_APP_API_LINK=https://openrouter.ai/api/v1
+REACT_APP_API_LINK=https://openrouter.ai/api/v1/chat/completions
 REACT_APP_API_KEY=your_openrouter_api_key_here
 REACT_APP_MODEL=openai/gpt-3.5-turbo
 REACT_APP_MAX_TOKENS=1000
